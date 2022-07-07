@@ -1,8 +1,23 @@
+using CrudClientAPI.Context;
+using CrudClientAPI.Context.Repositories;
+using CrudClientAPI.Mapper;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("CrudClientCs");
+
+builder.Services
+    .AddDbContext<CrudClientContext>(o =>
+        o.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
+builder.Services.AddAutoMapper(typeof(ClientsMapper));
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
